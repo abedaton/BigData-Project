@@ -30,7 +30,7 @@ def f1(n):
     data = generate_data.test_uniform(size=n, err=2, num_outlier=3)
     k = 3
     grid = GridAllocation.Grid([0,0], data)
-    main.calc_lof(data, grid, k, False)
+    main.calc_lof(data, grid, k, None, False, None)
 
 def f2(n):
     num_thread =10
@@ -47,7 +47,7 @@ def f2(n):
 
     N = GridAllocation.gbp(gridSet, [[]]*num_thread)
 
-    threads = [threading.Thread(target=main.threded_lof, args=(sub_grid, grid_dict, k, None, name+1, False)) for name, sub_grid in enumerate(N)]
+    threads = [threading.Thread(target=main.threaded_lof, args=(sub_grid, grid_dict, k, None, name + 1, None, False)) for name, sub_grid in enumerate(N)]
     for thread in threads:
         thread.start()
 

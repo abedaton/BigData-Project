@@ -2,7 +2,7 @@ from tabnanny import verbose
 import numpy as np
 import matplotlib.pyplot as plt
 import random
-from generate_data import test_uniform, generate_circle, generate_cluster
+from generate_data import test_uniform, generate_circle, generate_cluster, test_uniform3, generate_data
 import threading
 import sys
 import logging
@@ -10,7 +10,6 @@ from logger import handler
 import argparse
 
 logging.basicConfig(handlers=[handler()], level=logging.INFO)
-
 
 from DLC import *
 
@@ -37,23 +36,23 @@ def plot_lib(data, ax):
     ax.scatter(outlier_values["x"], outlier_values["y"], color="r")
 
 
-def calc_lof(tuples, grid, k, plot=False, ax=None):
+def calc_lof(tuples, grid, k, scatter_fun, plot=False, ax=None):
     for p in tuples:
         lof = LOF(k, p, grid)
         if plot:
             if lof > 1.8:
-                ax.scatter(p[0], p[1], color = 'r', alpha=0.7)
+                scatter_fun(p, ax, color="r", alpha=0.7)
             elif lof > 1.2:
-                ax.scatter(p[0], p[1], color = "purple", alpha=0.6)
+                scatter_fun(p, ax, color="purple", alpha=0.6)
             else:
-                ax.scatter(p[0], p[1], color = "b", alpha=0.5)
+                scatter_fun(p, ax, color="b", alpha=0.5)
 
-def threded_lof(sub_grid, grid_dict, k, ax, thread_name, plot=True):
+def threaded_lof(sub_grid, grid_dict, k, ax, thread_name, scatter_fun, plot=True):
     logging.info("Starting thread: " + str(thread_name))
     for g in sub_grid:
         tuples: list[tuple] = g.list_tuples
         new_grid: Grid = grid_dict[g]
-        calc_lof(tuples, new_grid, k, plot, ax)
+        calc_lof(tuples, new_grid, k, scatter_fun, plot, ax)
             
 def get_data(file_name = "../datasets/shuttle/shuttle.trn"):
     f = open(file_name, "r")
@@ -89,8 +88,6 @@ if __name__ == "__main__":
         if arg == '-i' or arg == '-info':
             info_plot = True
             num_plot += 1
-        if arg == '-t' or arg == '-time':
-            time = True
 
     if num_plot == 0:
         exit()
@@ -101,24 +98,46 @@ if __name__ == "__main__":
 
 
     #data = get_data()
-    data = test_uniform(size=100, err=2, num_outlier=3)
+    # -----
+    # data = test_uniform(size=100, err=2, num_outlier=3)
+    # -----
+    # data = test_uniform(size=100, err=2, num_outlier=3)
+    dim = 3
+    data = generate_data(size=100, err=2, num_outlier=5, dim=dim)
+
     #data = generate_circle(size=100, radius=2, num_outlier=5)
     #data = generate_cluster()
 
-    fig, axs = plt.subplots(num_plot, 1)
-    axs = fig.axes
-    ax_plot, ax_info = None, None
-    if plot:
-        ax_plot = list(axs)[0]
-        ax_plot.set_title("GBP + DLC + LOF")
-    if info_plot:
-        ax_info = list(axs)[-1]
-        ax_info.set_title("Info")
+    fig, ax, fun = None, None, None
+    if dim == 2:
+        fig, axs = plt.subplots(num_plot, 1)
+        fun = lambda p, ayx, color, alpha: ayx.scatter(p[0], p[1], color=color, alpha=alpha)
+    elif dim == 3:
+        fig = plt.figure(figsize=plt.figaspect(0.5))
+        ax = fig.add_subplot(projection="3d")
+        fun = lambda p, ayx, color, alpha: ayx.scatter(p[0], p[1], p[2], color=color, alpha=alpha)
+        info_plot = False
+    else:
+        print("Cannot print in", len(data[0]), "dimensions")
+        plot = False
+        info_plot = False
 
-    fig.tight_layout()
+    ax_plot, ax_info = None, None
+
+    if 1 < dim < 4:
+        axs = fig.axes
+        if plot:
+            ax_plot = list(axs)[0]
+            ax_plot.set_title("GBP + DLC + LOF")
+        if info_plot:
+            ax_info = list(axs)[-1]
+            ax_info.set_title("Info")
+
+        fig.tight_layout()
+        if dim == 2:
+            plot_grid(num_split, list(axs))
 
     gridSet = GridSet(data, num_split)
-    plot_grid(num_split, list(axs))
 
     grid_dict = {}
     for grid in gridSet.grid_set:
@@ -128,7 +147,7 @@ if __name__ == "__main__":
     N = gbp(gridSet, [[]]*num_thread)
     verify_theorem1(N)
 
-    threads = [threading.Thread(target=threded_lof, args=(sub_grid, grid_dict, k, ax_plot, name+1, plot)) for name, sub_grid in enumerate(N)]
+    threads = [threading.Thread(target=threaded_lof, args=(sub_grid, grid_dict, k, ax_plot, name + 1, fun, plot)) for name, sub_grid in enumerate(N)]
     for thread in threads:
         thread.start()
 

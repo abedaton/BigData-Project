@@ -4,7 +4,7 @@ import numpy as np
 import math
 
 
-def test_uniform(size=100, err=2, num_outlier=5):
+def test_uniform(size=100, err=2, num_outlier=5, dimensions = 2):
     x = np.arange(size)
     delta = np.random.uniform(-err, err, size=(size,))
     y = np.abs(0.4 * x + 3 + delta)
@@ -67,34 +67,69 @@ def normalize_xy(x, y):
 
     return x2, y2
 
+def normalize_xyz(x, y, z):
+    xmax = max(x)
+    ymax = max(y)
+    zmax = max(z)
+    x2 = [float(i)/xmax for i in x]
+    y2 = [float(i)/ymax for i in y]
+    z2 = [float(i) / zmax for i in z]
+
+    return x2, y2, z2
 
 def merge_xy(x, y):
     return [(x[i],y[i]) for i in range(len(x))]
 
 
-# -------------------------------------------------------------------
+def test_uniform3(size=100, err=2, num_outlier=5):
+    x = np.arange(size)
+    delta = np.random.uniform(-err, err, size=(size,))
+    y = np.abs(0.4 * x + 3 + delta)
+    z = np.abs(0.2 * x + 4 + delta)
 
-# def generate_rand(median=100, err=12, outlier_err=100, size=80, outlier_size=10):
-#     errs = err * np.random.rand(size) * np.random.choice((-1, 1), size)
-#     data = median + errs
-#
-#     lower_errs = outlier_err * np.random.rand(outlier_size)
-#     lower_outliers = median - err - lower_errs
-#
-#     upper_errs = outlier_err * np.random.rand(outlier_size)
-#     upper_outliers = median + err + upper_errs
-#
-#     data = np.concatenate((data, lower_outliers, upper_outliers))
-#     np.random.shuffle(data)
-#
-#     return data
+    x, y, z = normalize_xyz(x, y, z)
 
-# def merge_coordinates(x, y):
-#     if len(x) == len(y):
-#         data = []
-#         for i in range(len(x)):
-#             data.append([x[i], y[i]])
-#         return data
-#     else:
-#         print("X and Y must have the same length")
-#         return None
+    for _ in range(num_outlier):
+        x.append(random.random())
+        y.append(random.random())
+        z.append(random.random())
+
+    data = merge_xyz(x, y, z)
+    return data
+
+def merge_xyz(x, y, z):
+    return [(x[i],y[i], z[i]) for i in range(len(x))]
+
+def generate_data(size=100, err=2, num_outlier=5, dim = 2):
+    dimensions = [None]*dim
+    dimensions[0] = np.arange(size)
+    delta = np.random.uniform(-err, err, size=(size,))
+    for otherdim in range(len(dimensions)):
+        if otherdim != 0:
+            dimensions[otherdim] = np.abs(np.random.rand() * dimensions[0] + np.random.randint(0, 6) + delta)
+
+    normalized = normalize(dimensions)
+
+    for i in range(len(normalized)):
+        for _ in range(num_outlier):
+            normalized[i].append(random.random())
+
+    return merge(normalized)
+
+
+def normalize(dimensions):
+    data = []
+    for dim in dimensions:
+        maxi = max(dim)
+        data.append([float(i)/maxi for i in dim])
+    return data
+
+def merge(data):
+    # [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
+    sol = []
+    for i in range(len(data[0])):
+        sol.append([])
+        for d in range(len(data)):
+            sol[-1].append(data[d][i])
+
+    return sol
