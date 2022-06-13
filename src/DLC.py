@@ -60,7 +60,7 @@ def integrated_rectangle(p: tuple, g: Grid, localDistK: float):
 
 
 # Distributed LOF Computation method
-def dlc(k: int, grid: Grid, neighbours: list[Grid], plot_rectangles=False):
+def dlc(k: int, grid: Grid, neighbours: list[Grid], plot_info=False, ax=None):
     cross_grid_list = []
     add = []
     for p in grid.list_tuples:
@@ -68,27 +68,33 @@ def dlc(k: int, grid: Grid, neighbours: list[Grid], plot_rectangles=False):
         if is_cross_grid(p, grid, localDistK):
             cross_grid_list = cross_grid_list + [p]
             for adjacent in neighbours:
+                #print(localDistK)
                 if dispPGrid(p, adjacent) < localDistK:
                     # Compute the related minimum rectangle in g
-                    rmin, rmax = integrated_rectangle(p, grid, localDistK)
-                    if plot_rectangles:
-                        plt.hlines(y = rmin[1], xmin = rmin[0], xmax = rmax[0], colors = "grey", linestyles = ":")
-                        plt.hlines(y = rmax[1], xmin = rmin[0], xmax = rmax[0], colors = "grey", linestyles = ":")
-                        plt.vlines(x = rmin[0], ymin = rmin[1], ymax = rmax[1], colors = "grey", linestyles = ":")
-                        plt.vlines(x = rmax[0], ymin = rmin[1], ymax = rmax[1], colors = "grey", linestyles = ":")
+                    rmin, rmax = integrated_rectangle(p, adjacent, localDistK)
+                    #print(p, ':', rmin, rmax)
+                    if plot_info:
+                        ax.scatter(p[0], p[1], color = 'g', alpha=0.9)
+                        ax.hlines(y = rmin[1], xmin = rmin[0], xmax = rmax[0], colors = "grey", linestyles = ":")
+                        ax.hlines(y = rmax[1], xmin = rmin[0], xmax = rmax[0], colors = "grey", linestyles = ":")
+                        ax.vlines(x = rmin[0], ymin = rmin[1], ymax = rmax[1], colors = "grey", linestyles = ":")
+                        ax.vlines(x = rmax[0], ymin = rmin[1], ymax = rmax[1], colors = "grey", linestyles = ":")
 
                     for elem in adjacent.getTupleBetween(rmin, rmax):
                         if elem not in add:
                             add.append(elem)
+        elif plot_info:
+            ax.scatter(p[0], p[1], color = 'purple', alpha=0.9)
 
     new_grid = grid.__copy__()
     new_grid.add_tuple( add )
 
     return new_grid
 
-
+"""
 def dlc(_k: int, grid: Grid, neighbours: list[Grid]):
     new_grid = grid.__copy__()
     for n in neighbours:
         new_grid.add_tuple( n.list_tuples )
     return new_grid
+"""

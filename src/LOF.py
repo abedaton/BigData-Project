@@ -19,7 +19,7 @@ def k_distance(k, p, grid:Grid):
     if len(list_distance) > k:
         return list_distance[k-1]
     else:
-        return 0
+        return (grid.max[0]-grid.min[0])/2
 
 
 def realDistanceK(k, o, grid):
