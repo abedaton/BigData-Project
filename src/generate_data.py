@@ -16,7 +16,7 @@ def test_uniform(size=100, err=2, num_outlier=5):
         y.append(random.random())
 
     data = merge_xy(x, y)
-    return x, y, data
+    return data
 
 
 def generate_cluster(size=100, number_cluster=5, err=2, num_outlier=10):
@@ -35,7 +35,7 @@ def generate_cluster(size=100, number_cluster=5, err=2, num_outlier=10):
         y = np.append(y, random.random())
     data = merge_xy(x, y)
     logging.debug(str(data))
-    return x, y, data
+    return data
 
 
 def generate_circle(size=100, radius=1, num_outlier=5):
@@ -56,7 +56,7 @@ def generate_circle(size=100, radius=1, num_outlier=5):
         y.append(random.random())
 
     data = merge_xy(x, y)
-    return x, y, data
+    return data
 
 
 def normalize_xy(x, y):

@@ -68,11 +68,9 @@ def dlc(k: int, grid: Grid, neighbours: list[Grid], plot_info=False, ax=None):
         if is_cross_grid(p, grid, localDistK):
             cross_grid_list = cross_grid_list + [p]
             for adjacent in neighbours:
-                #print(localDistK)
                 if dispPGrid(p, adjacent) < localDistK:
                     # Compute the related minimum rectangle in g
                     rmin, rmax = integrated_rectangle(p, adjacent, localDistK)
-                    #print(p, ':', rmin, rmax)
                     if plot_info:
                         ax.scatter(p[0], p[1], color = 'g', alpha=0.9)
                         ax.hlines(y = rmin[1], xmin = rmin[0], xmax = rmax[0], colors = "grey", linestyles = ":")
