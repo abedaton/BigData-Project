@@ -40,7 +40,7 @@ class GridSet:
         self.grid_set = sorted(grid, key=lambda g:g.number_tuples, reverse=True)
 
     def __str__(self):
-        return "Sorted List: " + str([grid.number_tuples for grid in self.grid_set])
+        return "Sorted List: " + str([grid.number_tuples for grid in self.grid_set]) + "\n" + str(self.grid_set)
 
     def __copy__(self):
         copy = GridSet()
@@ -104,7 +104,7 @@ class Grid:
         return  str(self.pos) + ' '+ str(self.min) + ' '+ str(self.max) +' '+ str(self.number_tuples) + ' ' + str(self.list_tuples)
 
     def __repr__(self):
-        return  "Grid:" + str(self.pos)
+        return  "Grid:" + str(self.pos) + " " + str(self.number_tuples)
 
     def __copy__(self):
         copy = Grid()
@@ -132,7 +132,7 @@ class Grid:
         return res
 
 
-def gbp(G: GridSet, N):
+def gbp(G, N):
     for g in G.grid_set:
         if g.number_tuples > 0:
             logging.debug("Doing grid " + str(g.number_tuples) + " at index i = " +

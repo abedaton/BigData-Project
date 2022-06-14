@@ -9,14 +9,14 @@ import GridAllocation
 import DLC
 
 
-def plotruntime(f,r,trials=1,figsize=[3,3]):
+def plotruntime(f, r, trials=1, figsize=[3,3]):
     Times=[timeit.timeit(lambda:f(n),number=trials)/trials for n in r]
     fig, ax = plt.subplots(figsize=figsize)
     ax.plot(r,Times)
     ax.set_xlabel("Value of n")
     ax.set_ylabel("Runtime")
     
-def plotruntimes(functions,labels,r,trials=1,figsize=[3,3]):
+def plotruntimes(functions, labels, r, trials=1, figsize=[3,3]):
     fig, ax = plt.subplots(figsize=figsize)
     for f,l in zip(functions,labels):
         Times=[timeit.timeit(lambda:f(n),number=trials)/trials for n in r]

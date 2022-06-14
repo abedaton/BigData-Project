@@ -43,15 +43,15 @@ def calc_lof(tuples, grid, k, scatter_fun, plot=False, ax=None, ):
             if lof > 1.8:
                 scatter_fun(p, ax, color="r", alpha=0.7)
             elif lof > 1.2:
-                scatter_fun(p, ax, color="purple", alpha=0.6)
+                scatter_fun(p, ax, color="purple", alpha=0.7)
             else:
-                scatter_fun(p, ax, color="b", alpha=0.5)
+                scatter_fun(p, ax, color="b", alpha=0.7)
 
 def threaded_lof(sub_grid, grid_dict, k, ax, thread_name, scatter_fun, plot=True):
     logging.info("Starting thread: " + str(thread_name))
     for g in sub_grid:
-        tuples: list[tuple] = g.list_tuples
-        new_grid: Grid = grid_dict[g]
+        tuples = g.list_tuples
+        new_grid = grid_dict[g]
         calc_lof(tuples, new_grid, k, scatter_fun, plot, ax)
             
 def get_data(file_name = "../datasets/shuttle/shuttle.trn"):
@@ -66,7 +66,7 @@ def get_data(file_name = "../datasets/shuttle/shuttle.trn"):
 
 if __name__ == "__main__":
     seed = random.randint(0, 2**32-1) #844397963904029491
-    num_split = 4
+    num_split = 1
     k = 3
     num_thread = 1
     num_plot = 1
@@ -91,7 +91,7 @@ if __name__ == "__main__":
 
     if num_plot == 0:
         exit()
-        
+
     random.seed(seed)
     np.random.seed(seed)
     logging.info("Seed for this run: " + str(seed))
@@ -102,11 +102,24 @@ if __name__ == "__main__":
     # data = test_uniform(size=100, err=2, num_outlier=3)
     # -----
     # data = test_uniform(size=100, err=2, num_outlier=3)
-    dim = 2
+    dim = 3
     data = generate_data(size=100, err=2, num_outlier=5, dim=dim)
-
     #data = generate_circle(size=100, radius=2, num_outlier=5)
     #data = generate_cluster()
+
+    # #------------ To Del
+    # fig, ax = plt.subplots(num_plot, 1)
+    # axs = fig.axes
+    # plot_grid(num_split, list(axs))
+    # gridSet = GridSet(data, num_split)
+    # step = 1/num_split
+    # ax.set_title("Number of points per grid")
+    # for grid in gridSet.grid_set:
+    #     i,j = grid.pos
+    #     ax.text((i+0.4)*step, (j+0.4)*step, str(grid.number_tuples), fontsize=16)
+    # plt.show()
+    # exit()
+    #------------
 
     fig, ax, fun = None, None, None
     if dim == 2:
@@ -128,13 +141,14 @@ if __name__ == "__main__":
         axs = fig.axes
         if plot:
             ax_plot = list(axs)[0]
-            ax_plot.set_title("GBP + DLC + LOF")
+            ax_plot.set_title("LOF 3D")
         if info_plot:
             ax_info = list(axs)[-1]
             ax_info.set_title("Info")
 
         fig.tight_layout()
         if dim == 2:
+            # pass
             plot_grid(num_split, list(axs))
 
     gridSet = GridSet(data, num_split)

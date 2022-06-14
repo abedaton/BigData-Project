@@ -11,7 +11,7 @@ def dis(p, q):
     return np.sqrt(res)
 
 """For a given parameter k, the reachability distance of a tuple p w.r.t. o is"""
-def k_distance(k, p, grid:Grid):
+def k_distance(k, p, grid):
     list_distance = []
     for q in grid.list_tuples:
         if p != q:

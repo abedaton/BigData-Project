@@ -4,7 +4,7 @@ import logging
 
 
 # Given a tuple p and a grid g', the minimum distance between p and g' on the i-th dimension is
-def disi(i: int, p: tuple, grid: Grid):
+def disi(i, p, grid):
     if p[i] > grid.max[i]:
         return p[i]-grid.max[i]
     elif p[i] < grid.min[i]:
@@ -14,21 +14,21 @@ def disi(i: int, p: tuple, grid: Grid):
 
 
 # the minimum distance between p and g' is
-def dispPGrid(p: tuple, grid: Grid):
+def dispPGrid(p, grid):
     res = 0
     for i in range(len(p)):
         res += disi(i, p, grid) ** 2
     return np.sqrt(res)
 
 
-def is_cross_grid(p: tuple, grid: Grid, localDistK: float):
+def is_cross_grid(p, grid, localDistK):
     for i in range(len(p)):
         if not (p[i]-localDistK >= grid.min[i] and p[i]+localDistK < grid.max[i]):
             return True
     return False
 
 
-def NeiDis(i: int, p: tuple, g: Grid, localDistK: float):
+def NeiDis(i, p, g, localDistK):
     res = localDistK**2
     for j  in range(len(p)):
         if j != i:
@@ -36,7 +36,7 @@ def NeiDis(i: int, p: tuple, g: Grid, localDistK: float):
     return np.sqrt(res)
 
 
-def rectangle(i: int, p: tuple, g: Grid, localDistK: float):
+def rectangle(i, p, g, localDistK):
     neiDis = NeiDis(i, p, g, localDistK)
     if p[i] > g.max[i]:
         rmin = p[i]-neiDis
@@ -50,7 +50,7 @@ def rectangle(i: int, p: tuple, g: Grid, localDistK: float):
     return rmin, rmax
 
 
-def integrated_rectangle(p: tuple, g: Grid, localDistK: float):
+def integrated_rectangle(p, g, localDistK):
     rmin, rmax = [], []
     for i in range(len(p)):
         a, b = rectangle(i, p, g, localDistK)
