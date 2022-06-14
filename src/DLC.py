@@ -60,7 +60,7 @@ def integrated_rectangle(p: tuple, g: Grid, localDistK: float):
 
 
 # Distributed LOF Computation method
-def dlc(k: int, grid: Grid, neighbours: list[Grid], plot_info=False, ax=None):
+def dlc(k, grid, neighbours, plot_info=False, ax=None):
     cross_grid_list = []
     add = []
     for p in grid.list_tuples:

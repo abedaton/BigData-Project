@@ -36,7 +36,7 @@ def plot_lib(data, ax):
     ax.scatter(outlier_values["x"], outlier_values["y"], color="r")
 
 
-def calc_lof(tuples, grid, k, scatter_fun, plot=False, ax=None):
+def calc_lof(tuples, grid, k, scatter_fun, plot=False, ax=None, ):
     for p in tuples:
         lof = LOF(k, p, grid)
         if plot:
@@ -102,7 +102,7 @@ if __name__ == "__main__":
     # data = test_uniform(size=100, err=2, num_outlier=3)
     # -----
     # data = test_uniform(size=100, err=2, num_outlier=3)
-    dim = 3
+    dim = 2
     data = generate_data(size=100, err=2, num_outlier=5, dim=dim)
 
     #data = generate_circle(size=100, radius=2, num_outlier=5)

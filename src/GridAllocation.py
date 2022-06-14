@@ -80,12 +80,12 @@ class Grid:
         elif len(args) == 4:
             self.init2(*args)
 
-    def init1 (self, _pos: list[int], tuples: list[tuple]):
+    def init1 (self, _pos, tuples):
         _min = [0 for _ in range(len(tuples[0]))]
         _max = [1 for _ in range(len(tuples[0]))]
         self.init2(_pos, _min, _max, tuples)
 
-    def init2(self, _pos: list[int], _min: list[float], _max: list[float], tuples: list[tuple]):
+    def init2(self, _pos, _min, _max, tuples):
         self.pos = _pos
         self.min = _min
         self.max = _max
@@ -115,11 +115,11 @@ class Grid:
         copy.list_tuples = self.list_tuples[:]
         return copy
 
-    def add_tuple(self, tuples: list[tuple]):
+    def add_tuple(self, tuples):
         self.number_tuples += len(tuples)
         self.list_tuples += tuples
 
-    def getTupleBetween(self, rmin: list[float], rmax: list[float]):
+    def getTupleBetween(self, rmin, rmax):
         res = []
         for p in self.list_tuples:
             boolean = True

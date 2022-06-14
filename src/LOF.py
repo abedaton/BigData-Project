@@ -46,7 +46,7 @@ def realDistanceK(k, o, grid):
 Given a positive integer k, the k-distance neighborhood of a tuple o is the set of tuples whose distances from o
 are smaller than or equal to the k-distance of o
 """
-def neighK(k: int, o: tuple, grid: Grid) -> list[tuple]:
+def neighK(k, o, grid):
     distance = k_distance(k, o, grid)
     neighbours = []
     for q in grid.list_tuples:
@@ -60,7 +60,7 @@ def reachability_distance(k, p, o, grid):
 
 
 # For a given parameter k, the local reachability density of a tuple o is
-def LRD(k, o, grid, neighbours: list[tuple]):
+def LRD(k, o, grid, neighbours):
     sub = 0
     for p in neighbours:
         sub += reachability_distance(k, p, o, grid)
