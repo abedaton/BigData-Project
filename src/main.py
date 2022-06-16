@@ -40,9 +40,9 @@ def calc_lof(tuples, grid, k, scatter_fun, plot=False, ax=None, ):
     for p in tuples:
         lof = LOF(k, p, grid)
         if plot:
-            if lof > 1.8:
+            if lof > 1.3:
                 scatter_fun(p, ax, color="r", alpha=0.7)
-            elif lof > 1.2:
+            elif lof > 1:
                 scatter_fun(p, ax, color="purple", alpha=0.7)
             else:
                 scatter_fun(p, ax, color="b", alpha=0.7)
@@ -65,10 +65,10 @@ def get_data(file_name = "../datasets/shuttle/shuttle.trn"):
     return data
 
 if __name__ == "__main__":
-    seed = random.randint(0, 2**32-1) #844397963904029491
-    num_split = 1
+    seed = 2651051345 #random.randint(0, 2**32-1)
+    num_split = 4
     k = 3
-    num_thread = 1
+    num_thread = 10
     num_plot = 1
     plot = True
     info_plot = False
@@ -102,7 +102,7 @@ if __name__ == "__main__":
     # data = test_uniform(size=100, err=2, num_outlier=3)
     # -----
     # data = test_uniform(size=100, err=2, num_outlier=3)
-    dim = 3
+    dim = 2
     data = generate_data(size=100, err=2, num_outlier=5, dim=dim)
     #data = generate_circle(size=100, radius=2, num_outlier=5)
     #data = generate_cluster()
@@ -141,7 +141,7 @@ if __name__ == "__main__":
         axs = fig.axes
         if plot:
             ax_plot = list(axs)[0]
-            ax_plot.set_title("LOF 3D")
+            ax_plot.set_title("DLC")
         if info_plot:
             ax_info = list(axs)[-1]
             ax_info.set_title("Info")
