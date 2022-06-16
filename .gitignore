@@ -2,7 +2,7 @@
 Project.iml
 
 # Folders
-out/
+out/*
 datasets/
 .idea/
 
