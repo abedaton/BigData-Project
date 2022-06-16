@@ -100,6 +100,20 @@ def test_uniform3(size=100, err=2, num_outlier=5):
 def merge_xyz(x, y, z):
     return [(x[i],y[i], z[i]) for i in range(len(x))]
 
+def generate_data_new(size=100, err=2, num_outlier=5, dim = 2):
+    err = err*size/100
+    data = []
+    for n in range(size):
+        data.append([])
+        for _d in range(dim):
+            delta = np.random.uniform(-err, err, size=(1,))[0]
+            data[-1].append((n+delta))
+    for _n in range(num_outlier):
+        data.append([])
+        for _d in range(dim):
+            data[-1].append(random.randint(0, size))
+    return data
+
 def generate_data(size=100, err=2, num_outlier=5, dim = 2):
     dimensions = [None]*dim
     dimensions[0] = np.arange(size)

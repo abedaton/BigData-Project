@@ -65,7 +65,7 @@ def get_data(file_name = "../datasets/shuttle/shuttle.trn"):
     return data
 
 if __name__ == "__main__":
-    seed = 2651051345 #random.randint(0, 2**32-1)
+    seed = random.randint(0, 2**32-1) #2651051345
     num_split = 4
     k = 3
     num_thread = 10
@@ -149,7 +149,7 @@ if __name__ == "__main__":
         fig.tight_layout()
         if dim == 2:
             # pass
-            plot_grid(num_split, list(axs))
+            plot_grid(num_split, list(axs), 0, 1)
 
     gridSet = GridSet(data, num_split)
 
