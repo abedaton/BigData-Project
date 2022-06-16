@@ -1,6 +1,5 @@
 import timeit
 import matplotlib.pyplot as plt
-import random
 import threading
 
 import generate_data

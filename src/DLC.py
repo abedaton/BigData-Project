@@ -1,7 +1,4 @@
 from LOF import *
-import matplotlib.pyplot as plt
-import logging
-
 
 # Given a tuple p and a grid g', the minimum distance between p and g' on the i-th dimension is
 def disi(i, p, grid):

@@ -1,4 +1,3 @@
-from tabnanny import verbose
 import numpy as np
 import matplotlib.pyplot as plt
 import random
@@ -7,7 +6,6 @@ import threading
 import sys
 import logging
 from logger import handler
-import argparse
 
 logging.basicConfig(handlers=[handler()], level=logging.INFO)
 
